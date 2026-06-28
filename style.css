@@ -1,0 +1,276 @@
+body {
+    background-color: #fbe3e3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+    perspective: 1500px;
+    user-select: none;
+}
+
+.envelope-wrapper {
+    position: relative;
+    background-color: transparent;
+}
+
+.envelope {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    background-color: #f08080;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+}
+
+.flap {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-left: 150px solid transparent;
+    border-right: 150px solid transparent;
+    border-top: 100px solid #cd5c5c;
+    transform-origin: top;
+    transition: transform 0.4s ease, z-index 0.4s;
+    z-index: 3;
+}
+
+.pocket {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    border-left: 150px solid #f4978e;
+    border-right: 150px solid #f4978e;
+    border-bottom: 100px solid #f08080;
+    border-top: 100px solid transparent;
+    z-index: 5;
+    pointer-events: none;
+}
+
+/* Container Kertas Utama */
+.letter {
+    position: absolute;
+    left: 20px;
+    top: -20px; 
+    width: 260px;
+    height: 240px; 
+    z-index: 2;
+    cursor: grab;
+    transform-style: preserve-3d;
+    opacity: 0;
+    transform: scale(0.5) translateY(100px);
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.4s ease, height 0.6s ease;
+}
+
+/* Sub-container untuk efek rotasi 3D */
+.letter-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.letter-front, .letter-back {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #fffdf9;
+    padding: 20px;
+    box-sizing: border-box;
+    backface-visibility: hidden;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+    border-radius: 4px;
+}
+
+.letter-front {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    transform: rotateY(0deg);
+}
+
+.letter-back {
+    transform: rotateY(180deg);
+    z-index: 1;
+    padding: 15px 10px 15px 15px;
+}
+
+/* Container Scroll internal agar teks panjang tidak tumpah */
+.scroll-content {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 8px;
+    box-sizing: border-box;
+}
+
+/* Kustomisasi Scrollbar halus */
+.scroll-content::-webkit-scrollbar {
+    width: 4px;
+}
+.scroll-content::-webkit-scrollbar-thumb {
+    background: #f4978e;
+    border-radius: 2px;
+}
+
+/* Tipografi Teks */
+.words {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 11px;
+    line-height: 1.5;
+    color: #333;
+    white-space: pre-line;
+}
+.line1 {
+    font-weight: bold;
+    color: #b54747;
+}
+.cover-text {
+    font-size: 14px;
+    color: #555;
+    text-align: center;
+    font-weight: bold;
+}
+.message {
+    margin-top: 10px;
+    text-align: justify;
+}
+.footer {
+    margin-top: 20px;
+    text-align: right;
+    font-style: italic;
+    font-weight: bold;
+    color: #555;
+}
+
+/* Container Utama Cap Lilin (Efek Cairan Bulat Tidak Beraturan) */
+.wax-seal {
+    position: absolute;
+    top: 72px;        /* Disesuaikan agar pas di persimpangan flap amplop */
+    left: 125px;
+    width: 50px;      /* Ukuran cap lilin dibuat lebih besar dan mantap */
+    height: 50px;
+    background: radial-gradient(circle, #d90429 60%, #b50222 100%); /* Efek gradasi warna lilin */
+    
+    /* Membuat bentuk lingkaran agak tidak beraturan khas lilin leleh tradisional */
+    border-radius: 48% 52% 50% 50% / 40% 50% 50% 60%; 
+    
+    /* Efek bayangan timbul (3D) luar dan dalam */
+    box-shadow: 0 3px 6px rgba(0,0,0,0.3), 
+                inset 0 2px 4px rgba(255,255,255,0.3), 
+                inset 0 -3px 5px rgba(0,0,0,0.4);
+                
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 6;
+    transition: transform 0.4s ease, background 0.4s ease;
+}
+
+/* Lingkaran pembatas ukiran di dalam cap lilin */
+.wax-seal::before {
+    content: "";
+    position: absolute;
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid rgba(0, 0, 0, 0.15);
+    border-radius: 50%;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+}
+
+/* Icon Paw Kucing di atas Cap Lilin */
+.paw-icon {
+    font-size: 24px; /* Ukuran pas di dalam lingkaran stempel */
+    color: #ff4d6d;  /* Warna paw dibuat merah muda cerah agar terlihat kontras menonjol */
+    z-index: 2;
+    transform: rotate(-10deg); /* Diberi kemiringan sedikit agar estetik */
+    filter: drop-shadow(0 1px 2px rgba(255,255,255,0.3));
+    transition: color 0.4s ease;
+}
+
+/* ========================================================
+   MANAJEMEN TRANSISI TIAP STATE (GANTI .emoji-sticker JADI .wax-seal)
+   ======================================================== */
+
+/* --- KLIK 1: Cap lilin ikut naik dan BERUBAH WARNA (Misal jadi warna Emas Mewah) --- */
+.envelope-wrapper.state-1 .wax-seal { 
+    transform: translateY(-20px) scale(0.9); 
+    background: radial-gradient(circle, #ffb703 60%, #fb8500 100%);
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+}
+.envelope-wrapper.state-1 .paw-icon {
+    color: #fffdf9; /* Paw berubah jadi putih bersih saat stempel berubah emas */
+}
+
+/* --- KLIK 2: Kertas keluar penuh --- */
+.envelope-wrapper.state-2 .wax-seal { 
+    transform: translateY(-40px) scale(0.8); 
+    background: radial-gradient(circle, #ffb703 60%, #fb8500 100%);
+}
+.envelope-wrapper.state-2 .paw-icon {
+    color: #fffdf9;
+}
+
+/* --- KLIK 3: Kertas membalik --- */
+.envelope-wrapper.state-3 .wax-seal { 
+    transform: translateY(-40px) scale(0.8); 
+    background: radial-gradient(circle, #ffb703 60%, #fb8500 100%);
+}
+.envelope-wrapper.state-3 .paw-icon {
+    color: #fffdf9;
+}
+
+
+
+/* ========================================================
+   MANAJEMEN TRANSISI BERDASARKAN TAHAPAN STATE
+   ======================================================== */
+
+.envelope-wrapper.state-1 .flap {
+    transform: rotateX(180deg);
+    z-index: 1;
+}
+.envelope-wrapper.state-1 .letter {
+    opacity: 1;
+    transform: scale(1) translateY(-50px);
+    z-index: 7;
+}
+
+.envelope-wrapper.state-2 .flap {
+    transform: rotateX(180deg);
+    z-index: 1;
+}
+.envelope-wrapper.state-2 .letter {
+    opacity: 1;
+    transform: scale(1) translateY(-160px); 
+    z-index: 7;
+}
+
+
+.envelope-wrapper.state-3 .flap {
+    transform: rotateX(180deg);
+    z-index: 1;
+}
+.envelope-wrapper.state-3 .letter {
+    opacity: 1;
+    transform: scale(1) translateY(-270px); 
+    z-index: 7;
+}
+.envelope-wrapper.state-3 .letter-inner {
+    transform: rotateY(180deg); 
+}
+
+
+/* Status Dragging */
+.letter.dragging {
+    cursor: grabbing;
+    transition: none !important;
+}
+.letter.dragging .letter-inner {
+    transition: none !important;
+}
